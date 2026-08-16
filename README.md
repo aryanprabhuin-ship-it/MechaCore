@@ -24,7 +24,7 @@ the routing was easily the most painful bit because the board has 61 switches an
 
 ## project status
 
-this repo has the full hardware design, cad and manufacturing exports. the PCB and case geometry is done, but im still calling it a pre-order V1 because the last audit caught a few boring but important cleanup jobs
+this repo has the full hardware design, cad, manufacturing exports and the Pico 2 firmware. the PCB and case geometry is done, the matrix pinout is locked and the firmware is ready to copy straight onto the controller
 
 whats included :
 
@@ -34,6 +34,7 @@ whats included :
 - production files (bom, positions, designators, ipc netlist and gerber zip)
 - 60% ANSI keyboard layout json
 - schematic and individual fabrication layer PDFs
+- complete Pico 2 firmware with the matching CircuitPython UF2
 
 current hardware summary :
 
@@ -49,7 +50,7 @@ current hardware summary :
 | Keycaps | Plum Blossom cherry profile shine-through PBT |
 | Case | 3d printed bottom shell + separate switch plate |
 | PCB | 2 layer FR4, 300mm x 135.8mm, 1.6mm, green soldermask |
-| Firmware | not included yet, hardware files are the current focus |
+| Firmware | dependency free CircuitPython 10.2.1 USB HID firmware, 2 layers |
 
 the dark rounded case and the big **MechaCore** name on the plate is what kinda gave the whole board its look. the pink plum blossom keycaps should contrast with it nicely, atleast thats the plan once it becomes a real physical board
 
@@ -99,6 +100,9 @@ important files in this repo :
 - `production/Mechacore.zip`  (gerbers)
 - `bom.csv`  (build cost / purchase list)
 - `PDFs/Mechacore.pdf`  (schematic print)
+- `firmware/code.py`  (MechaCore key scanner + keymap)
+- `firmware/boot.py`  (USB name + HID setup)
+- `firmware/adafruit-circuitpython-raspberry_pi_pico2-en_US-10.2.1.uf2`
 
 ## cad
 
@@ -106,11 +110,49 @@ designed in **fusion 360**.. the editable `.f3d` file is in `3D/Case/` and there
 
 the exact pcb was also exported as both STEP and STL in `3D/PCB/`. i used that model inside the case design instead of guessing the board outline, especially for the rounded corners, Pico usb opening, solder clearance and stabilizer holes
 
-## firmware note
+## firmware
 
-firmware is **not in this repo yet**. MechaCore currently focuses on the hardware + case and the board has a normal 14 column x 5 row diode matrix wired straight to the Pico
+firmware is finaly in the repo under `firmware/`. its a small dependency free CircuitPython setup written just for MechaCore, so theres no KMK folder, package install or placeholder pin list to fix later. the GPIO map was copied directly from the finished kicad PCB and the bundled UF2 is the official stable [CircuitPython Pico 2 build](https://circuitpython.org/board/raspberry_pi_pico2/)
 
-the firmware still needs the final keymap, GPIO pin map and matrix direction copied from the schematic. i dont wanna throw in random untested code and call it complete, so that part stays listed as a next step until the physical board can be brought up and tested properly
+| | |
+|---|---|
+| Runtime | CircuitPython 10.2.1 for Raspberry Pi Pico 2 |
+| Rows | GP0, GP1, GP2, GP3, GP4 |
+| Columns | GP5 through GP18 |
+| Matrix | 5 rows x 14 columns, 61 populated positions |
+| Diodes | column anode to row cathode (`columns_to_anodes=True`) |
+| Debounce | 3 stable scans at 2ms, around 6ms total |
+| USB | standard keyboard + consumer control HID |
+| Rollover | 6 normal keys plus all modifiers |
+
+the base layer follows the actual keycap layout :
+
+```text
+`     1   2   3   4   5   6   7   8   9   0   -   =   Backspace
+Tab   Q   W   E   R   T   Y   U   I   O   P   [   ]   \
+Caps  A   S   D   F   G   H   J   K   L   ;   '       Enter
+Shift Z   X   C   V   B   N   M   ,   .   /           Shift
+Ctrl  Win Alt             Space             Alt Win Menu/Fn Ctrl
+```
+
+the Menu key still works like a normal Menu key when tapped. hold it for 180ms or press it together with another key and it becomes Fn
+
+- `Fn + backtick` = Escape
+- `Fn + 1` through `Fn + =` = F1 through F12
+- `Fn + Backspace` = Delete
+- `Fn + U / I / O / P` = Home / Up / End / Page Up
+- `Fn + J / K / L / ;` = Left / Down / Right / Page Down
+- `Fn + Q / W / E` = Previous track / Play-Pause / Next track
+- `Fn + M`, `Fn + ,`, `Fn + .`, `Fn + /` = Mute / Volume Down / Volume Up / Play-Pause
+
+### flashing it
+
+1. hold the BOOTSEL button on the Pico 2 while plugging the keyboard into usb
+2. open the new `RP2350` drive and copy `firmware/adafruit-circuitpython-raspberry_pi_pico2-en_US-10.2.1.uf2` onto it
+3. after it restarts as `CIRCUITPY`, copy `firmware/boot.py` and `firmware/code.py` to the root of that drive
+4. unplug and reconnect once so the USB setup from `boot.py` loads cleanly
+
+thats it, no pin edits or extra libraries are needed. the keyboard shows up as **MechaCore** and the files stay editable from the `CIRCUITPY` drive if i ever wanna change the layout later
 
 ## bom (summary)
 
