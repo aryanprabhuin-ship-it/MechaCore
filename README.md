@@ -4,7 +4,7 @@ MechaCore is my custom 60% (61 key) wired mechanical keyboard, its built around 
 
 so basicaly i wanted to make a keyboard where i didnt just download somebody elses pcb and put switches in it.. i wanted to actualy understand the matrix, diodes, stabilizers, routing, plate tolerances and how the pcb fits inside a real printable case. i designed the layout, schematic, pcb and the full case from scratch using kicad + fusion 360 and ngl the case part took way more trys then i expected lol
 
-![MechaCore full 3D model](Images/fusion-case.png)
+![MechaCore Rev D fastenerless enclosure](Images/revD-seamless-fastenerless-top.png)
 
 ## why i made this
 
@@ -24,13 +24,14 @@ the routing was easily the most painful bit because the board has 61 switches an
 
 ## project status
 
-this repo has the full hardware design, cad, manufacturing exports and the Pico 2 firmware. the PCB and case geometry is done, the matrix pinout is locked and the firmware is ready to copy straight onto the controller
+this repo has the full hardware design, cad, manufacturing exports and the Pico 2 firmware. the PCB and case geometry is done, the matrix pinout is locked and the firmware is ready to copy straight onto the controller. the current enclosure is **Rev D**, a two-piece fastenerless design with no screw heads or locator tips visible from the top
 
 whats included :
 
 - kicad project, schematic and fully routed pcb
 - full 3d cad (`.f3d`, `.step` and printable `.stl` files)
-- separate bottom case and switch plate exports
+- current Rev D fused bottom case and blind-snap switch plate exports
+- retained Rev B and Rev C CAD archives for design-history / rollback
 - production files (bom, positions, designators, ipc netlist and gerber zip)
 - 60% ANSI keyboard layout json
 - schematic and individual fabrication layer PDFs
@@ -48,7 +49,7 @@ current hardware summary :
 | Stabilizers | Durock Clear screw-in V2 (6.25u space + 2u / 2.25u / 2.75u) |
 | Switches | Akko V3 Penguin Pro |
 | Keycaps | Plum Blossom cherry profile shine-through PBT |
-| Case | 3d printed bottom shell + separate switch plate |
+| Case | 2 printed parts: fused bottom shell + blind-snap switch plate, no loose case hardware |
 | PCB | 2 layer FR4, 300mm x 135.8mm, 1.6mm, green soldermask |
 | Firmware | dependency free CircuitPython 10.2.1 USB HID firmware, 2 layers |
 
@@ -56,40 +57,72 @@ the dark rounded case and the big **MechaCore** name on the plate is what kinda 
 
 ## images
 
-### full 3d model
-![MechaCore assembled case and plate](Images/fusion-case.png)
+### current Rev D enclosure
 
-### switch plate
-![MechaCore switch plate in CAD](Images/fresh-case-plate-iso.jpg)
+the final top surface is continuous. all six screw stacks from the earlier revisions were removed and both kinematic locator receivers were made blind, so there are no fastener heads or locator dots visible around the key field
 
-### pcb
+![Rev D clean top with no visible fasteners](Images/revD-seamless-fastenerless-top.png)
+
+the bottom case still uses six reinforced mounting stations, dual load-spreader spines and the round/expansion datum system. the screw sockets are now undercut receivers for the fused plate collets
+
+![Rev D fused bottom-case interior](Images/revD-fused-case-interior.png)
+
+each plate lock has a split 3.6mm shaft, stepped insertion pilot and 4.3mm retention bead. the relief direction alternates around the plate to reduce sensitivity to print-axis anisotropy
+
+![Rev D fused snap-collet detail](Images/revD-collet-pin-detail.png)
+
+the four hollow-cup feet, three PCB deflection catches and six underside ejector ports are fused into the two main printed bodies instead of being separate hardware
+
+![Rev D integral feet and ejector ports](Images/revD-integral-feet-and-ejectors.png)
+
+### PCB and electronics
+
+the complete 14x5 matrix, all 61 switches, 61 diodes, stabilizer symbols and Pico connections are kept in the same KiCad project
+
 ![MechaCore PCB routing in KiCad](Images/fresh-pcb-layout.jpg)
-
-### schematic / wiring
-the complete 14x5 matrix, all 61 switches, 61 diodes, stabilizer symbols and the Pico connections are kept in the same kicad project..
-
 ![MechaCore schematic](Images/schematic-export.png)
-
-### other screenshots
-some more actual views from kicad and the exported cad files
-
 ![PCB top view in KiCad 3D Viewer](Images/fresh-pcb-3d-top.jpg)
-![PCB isometric view in KiCad 3D Viewer](Images/fresh-pcb-3d-iso.jpg)
 ![Exported PCB STEP checked in CAD](Images/fresh-pcb-step-iso.jpg)
-![Switch and stabilizer plate cutouts](Images/fresh-case-plate-front.jpg)
-![Bottom case shell](Images/fresh-case-bottom-iso.jpg)
+
+### earlier enclosure development
+
+these views show the original shell/plate work and are kept as design-history references. the Rev D files below are the current manufacturing set
+
+![Original switch and stabilizer plate cutouts](Images/fresh-case-plate-front.jpg)
+![Original bottom case shell](Images/fresh-case-bottom-iso.jpg)
+
+## repository structure
+
+```text
+MechaCore/
+├── 3D/
+│   ├── Case/                 Fusion archives, STEP assemblies and case/plate STLs
+│   └── PCB/                  PCB reference model exported as STEP and STL
+├── BOM Pics/                 supplier/cart screenshots used during BOM research
+├── firmware/                 CircuitPython firmware, boot setup and Pico 2 UF2
+├── Images/                   README-ready project, PCB and CAD images
+├── layout/                   60% ANSI keyboard-layout JSON
+├── PCB/                      KiCad project, schematic, routed PCB and backups
+├── PDFs/                     schematic plus individual fabrication-layer PDFs
+├── production/               Gerbers, BOM, positions, designators and IPC netlist
+├── Working screen shot/      working CAD captures, including Rev B, C and D views
+├── bom.csv                   build-cost and purchase-planning BOM
+└── README.md
+```
+
+`Images/` contains the curated screenshots used by this README. `Working screen shot/` keeps the corresponding working captures so the documentation images can be replaced or compared without opening Fusion or KiCad.
 
 ## repo file checklist
 
-important files in this repo :
+important current files in this repo :
 
 - `PCB/Mechacore.kicad_pro`
 - `PCB/Mechacore.kicad_sch`
 - `PCB/Mechacore.kicad_pcb`
-- `3D/Case/Mechacore.f3d`
-- `3D/Case/Mechacore.step`
-- `3D/Case/Plate.stl`
-- `3D/Case/Bottom case.stl`
+- `3D/Case/Mechacore-overengineered-revD.f3d`  (editable current enclosure)
+- `3D/Case/Mechacore-overengineered-revD.step`  (current neutral CAD assembly)
+- `3D/Case/Plate-blind-snap-revD.stl`  (print-ready plate with fused collets)
+- `3D/Case/Bottom-case-fused-revD.stl`  (print-ready fused case)
 - `3D/PCB/Mechacore.step`
 - `3D/PCB/Mechacore.stl`
 - `layout/keyboard-layout.json`
@@ -106,7 +139,29 @@ important files in this repo :
 
 ## cad
 
-designed in **fusion 360**.. the editable `.f3d` file is in `3D/Case/` and theres a `.step` export right beside it if you only need the geometry. the two print ready pieces are `Plate.stl` and `Bottom case.stl`
+designed in **Fusion 360**. the current editable enclosure is `3D/Case/Mechacore-overengineered-revD.f3d`, with a STEP assembly beside it and separate production STLs for the case and plate
+
+Rev D is intentionally overengineered while keeping the physical part count low. the Fusion timeline contains **289 items and 52 parameters**, but the finished enclosure is exactly **two printable solids** with no component/hardware occurrences:
+
+- six fused, split snap collets on the plate underside
+- six matching undercut sockets inside the reinforced case bosses
+- 0.10mm radial retention interference and 0.05mm controlled seating travel
+- alternating collet-split directions for print-anisotropy compensation
+- round + expansion kinematic locators hidden below a 0.6mm plate roof
+- six 1.2mm underside ejector ports for non-destructive service removal
+- fused hollow-cup feet and fused PCB anti-sag catches
+- existing wall gussets and dual load-spreader spines retained for the clamp/load path
+
+to assemble it, align the blind locator pair and press evenly above the six edge stations until the retention beads seat in their undercut cavities. for removal, release the stations progressively through the underside ejector ports instead of bending one side of the plate
+
+older CAD is intentionally kept in the same folder:
+
+| Revision | Purpose |
+|---|---|
+| Original / unsuffixed | initial shell and plate baseline |
+| Rev B | first proper six-point M2.5 screw mounting system |
+| Rev C | screws, inserts, isolation washers, compression stops, feet and PCB supports |
+| **Rev D** | current two-piece blind-snap design with fused service features |
 
 the exact pcb was also exported as both STEP and STL in `3D/PCB/`. i used that model inside the case design instead of guessing the board outline, especially for the rounded corners, Pico usb opening, solder clearance and stabilizer holes
 
