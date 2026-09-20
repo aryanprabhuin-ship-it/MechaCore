@@ -216,14 +216,14 @@ full purchase list is in `bom.csv`. these prices are the rough planned cost in i
 | # | Name | Purpose | Qty | Cost (₹) | Distributor | Link |
 |---|------|---------|-----|----------|-------------|------|
 | 1 | PCB fabrication | 2 layer MechaCore boards | 5 boards | 5288 | Robu | [Buy](https://robu.in/product/online-pcb-manufacturing-service/) |
-| 2 | 3D printed case | bottom shell + plate | 1 set | 300 | Hack Club | — |
-| 3 | Plum Blossom Cherry Profile Shine-Through PBT Keycap Set | keycaps to actualy type on | 1 set | 2500 | Curiosity Caps | [Buy](https://curiositycaps.in/products/plum-blossom-cherry-profile-shine-through-dye-sublimation-pbt-keycap-set) |
+| 2 | 3D printed case | bottom shell + plate | 1 set | own funded| Hack Club | — |
+| 3 | Plum Blossom Cherry Profile Shine-Through PBT Keycap Set | keycaps to actualy type on | 1 set | own funded | Curiosity Caps | [Buy](https://curiositycaps.in/products/plum-blossom-cherry-profile-shine-through-dye-sublimation-pbt-keycap-set) |
 | 4 | Durock Clear Screw-In Stabilizers V2 | keeps the large keys stable | 1 set | 1595 | StacksKB | [Buy](https://stackskb.com/store/durock-clear-screw-in-stabilizers-v2/?attribute_combination=7%2B1+Set&attribute_spacebar-size=6.25U) |
-| 5 | Akko V3 Penguin Pro Switch (Pack of 45) | mechanical switches + spares | 2 packs | 2,398 | StacksKB | [Buy](https://stackskb.com/store/akko-v3-cream-black-pro-switch-pack-of-45/) |
+| 5 | Akko V3 Penguin Pro Switch (Pack of 45) | mechanical switches + spares | 1 pack | 1,199 | StacksKB | [Buy](https://stackskb.com/store/akko-v3-cream-black-pro-switch-pack-of-45/) |
 | 6 | Raspberry Pi Pico 2 | microcontroller / the brains | 1 | 519 | Robu | [Buy](https://robu.in/product/raspberry-pi-pico-2/) |
 | 7 | Slkor 1N4148W SOD-123 switching diodes | one diode per switch + some spares | 70 pcs | 100.10 | Robu | [Buy](https://robu.in/product/1n4148w-slkor-75v-1v-4ns-150ma-sod-123-switching-diodes-rohs/) |
 
-**rough total bom cost : ₹12,700.10**
+**rough total bom cost : ₹8,701.10**
 
 ---
 
